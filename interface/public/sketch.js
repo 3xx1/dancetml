@@ -18,7 +18,7 @@ let hotsampleRanges = [
     max: 200
   }
 ]
-
+let socket = io( 'http://localhost:5051' );
 
 function setup() {
   var canvas = createCanvas(window.innerWidth, 400);
@@ -81,6 +81,7 @@ function draw() {
   }
 
   // value update
+  let data = [0, 0, 0, 0];
   for (i = 0; i < hotsampleRanges.length; i++) {
     let avg = 0;
     for (ii = hotsampleRanges[i].min; ii <  hotsampleRanges[i].max; ii++) {
@@ -91,8 +92,10 @@ function draw() {
     } else {
       avg = 0;
     }
+    data[i] = avg;
     $('#channel--' + i).find('span.value').html(avg);
   }
+  socket.emit('data.update.interface', data);
 }
 
 setTimeout(() => {
